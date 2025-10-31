@@ -22,11 +22,12 @@ exports.register = async (req, res) => {
   const hash = await bcrypt.hash(password, 10);
 
   db.query(
-    "INSERT INTO users (email, first_name, last_name, password) VALUES ($1,$2,$3,$4) RETURNING id, email, first_name, last_name",
-    [email, first_name, last_name, hash],
+    `INSERT INTO users (email, first_name, last_name, profile_image, password)
+     VALUES ($1,$2,$3,$4,$5)
+     RETURNING id, email, first_name, last_name`,
+    [email, first_name, last_name, null, hash],
     (err, result) => {
       if (err) {
-   
         return res.status(400).json({ status: 1, message: "Email sudah digunakan" });
       }
 
