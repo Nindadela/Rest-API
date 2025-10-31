@@ -1,8 +1,8 @@
 const db = require('../config/db');
 
-// Public API Banner
+
 const getBanner = (req, res) => {
-  // Raw query prepared statement
+ 
   db.query(
     "SELECT banner_name, banner_image, description FROM banners ORDER BY id ASC",
     [],

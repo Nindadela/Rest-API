@@ -1,12 +1,12 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const validator = require('validator'); // import validator
+const validator = require('validator'); 
 
 exports.register = async (req, res) => {
   const { email, first_name, last_name, password } = req.body;
 
-  // Validasi input
+
   if (!email || !first_name || !last_name || !password) {
     return res.status(400).json({ status: 1, message: "Semua field wajib diisi" });
   }
@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     [email, first_name, last_name, hash],
     (err, result) => {
       if (err) {
-        // misal email sudah ada
+   
         return res.status(400).json({ status: 1, message: "Email sudah digunakan" });
       }
 
@@ -40,12 +40,9 @@ exports.register = async (req, res) => {
 };
 
 
-
-
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  // Validasi input
   if (!email || !password) {
     return res.status(400).json({ status: 102, message: "Parameter email tidak sesuai format", data: null });
   }
@@ -71,7 +68,7 @@ exports.login = (req, res) => {
       return res.status(401).json({ status: 103, message: "Username atau password salah", data: null });
     }
 
-    // Generate JWT 12 jam
+
     const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '12h' });
 
     res.status(200).json({

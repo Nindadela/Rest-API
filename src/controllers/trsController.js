@@ -12,7 +12,7 @@ const pay = (req, res) => {
         });
     }
 
-    // Ambil data service
+
     db.query("SELECT * FROM services WHERE service_code=$1", [service_code], (err, serviceResult) => {
         if (err) return res.status(500).json({ status: 1, message: "DB Error", data: null });
         if (serviceResult.rows.length === 0) {
@@ -22,7 +22,7 @@ const pay = (req, res) => {
         const service = serviceResult.rows[0];
         const amount = service.service_tariff;
 
-        // Ambil data user lengkap
+ 
         db.query("SELECT id, balance FROM users WHERE email=$1", [userEmail], (err, userResult) => {
             if (err) return res.status(500).json({ status: 1, message: "DB Error", data: null });
             if (userResult.rows.length === 0) return res.status(404).json({ status: 1, message: "User tidak ditemukan", data: null });
@@ -33,11 +33,11 @@ const pay = (req, res) => {
                 return res.status(400).json({ status: 102, message: "Saldo tidak cukup", data: null });
             }
 
-            // Kurangi balance user
+    
             db.query("UPDATE users SET balance = balance - $1 WHERE id=$2 RETURNING balance", [amount, user.id], (err) => {
                 if (err) return res.status(500).json({ status: 1, message: "DB Error", data: null });
 
-                // Simpan transaksi
+         
                 db.query(
                     `INSERT INTO transactions 
                     (user_id, service_name, amount, created_at, service_code, transaction_type) 
@@ -73,7 +73,7 @@ const getHistory = (req, res) => {
     const limit = parseInt(req.query.limit) || 3;
     const userEmail = req.user.email;
 
-    // Ambil user_id dulu
+   
     db.query("SELECT id FROM users WHERE email=$1", [userEmail], (err, userResult) => {
         if (err) return res.status(500).json({ status: 1, message: "DB Error" });
         if (userResult.rows.length === 0) return res.status(404).json({ status: 1, message: "User tidak ditemukan" });

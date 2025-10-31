@@ -26,7 +26,7 @@ const getProfile = (req, res) => {
 };
 
 const updateProfile = (req, res) => {
-    // Ambil email dari JWT (middleware verify sudah menyimpannya di req.user)
+
     const userEmail = req.user.email;
     const { first_name, last_name } = req.body;
 
@@ -34,7 +34,7 @@ const updateProfile = (req, res) => {
         return res.status(400).json({ status: 1, message: "Field first_name dan last_name wajib diisi", data: null });
     }
 
-    // Raw query dengan prepared statement
+ 
     db.query(
         "UPDATE users SET first_name=$1, last_name=$2 WHERE email=$3 RETURNING email, first_name, last_name, profile_image",
         [first_name, last_name, userEmail],
@@ -56,5 +56,6 @@ const updateProfile = (req, res) => {
         }
     );
 };
+
 
 module.exports = { getProfile , updateProfile};
